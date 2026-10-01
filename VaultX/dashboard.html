@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+```
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>SecureVault Dashboard</title>
+
+
+<style>
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+
+
+    body {
+
+        min-height: 100vh;
+
+        background:
+            linear-gradient(
+                135deg,
+                #141e30,
+                #243b55
+            );
+
+        color: white;
+
+    }
+
+
+    /* =========================================
+       HEADER
+    ========================================= */
+
+    .header {
+
+        height: 75px;
+
+        background: #111827;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        padding: 0 40px;
+
+        box-shadow:
+            0 4px 15px
+            rgba(0, 0, 0, 0.25);
+
+    }
+
+
+    .logo {
+
+        font-size: 24px;
+
+        font-weight: bold;
+
+    }
+
+
+    .logout {
+
+        padding: 10px 18px;
+
+        border: none;
+
+        border-radius: 8px;
+
+        background: #ef4444;
+
+        color: white;
+
+        cursor: pointer;
+
+        font-size: 14px;
+
+    }
+
+
+    .logout:hover {
+
+        background: #dc2626;
+
+    }
+
+
+    /* =========================================
+       MAIN LAYOUT
+    ========================================= */
+
+    .dashboard {
+
+        display: flex;
+
+        min-height: calc(100vh - 75px);
+
+    }
+
+
+    /* =========================================
+       LEFT SIDEBAR
+    ========================================= */
+
+    .sidebar {
+
+        width: 270px;
+
+        background: rgba(17, 24, 39, 0.95);
+
+        padding: 30px 20px;
+
+        box-shadow:
+            4px 0 20px
+            rgba(0, 0, 0, 0.2);
+
+    }
+
+
+    .sidebar-title {
+
+        font-size: 20px;
+
+        font-weight: bold;
+
+        margin-bottom: 25px;
+
+        padding-left: 10px;
+
+    }
+
+
+    /* =========================================
+       MENU BUTTONS
+    ========================================= */
+
+    .menu-item {
+
+        width: 100%;
+
+        padding: 17px 15px;
+
+        margin-bottom: 12px;
+
+        border: 1px solid
+            rgba(255, 255, 255, 0.1);
+
+        border-radius: 10px;
+
+        background:
+            rgba(255, 255, 255, 0.06);
+
+        color: white;
+
+        display: flex;
+
+        align-items: center;
+
+        gap: 14px;
+
+        cursor: pointer;
+
+        transition: 0.3s;
+
+        text-align: left;
+
+    }
+
+
+    .menu-item:hover {
+
+        background:
+            rgba(255, 255, 255, 0.15);
+
+        transform: translateX(5px);
+
+    }
+
+
+    .menu-item.active {
+
+        background: #2563eb;
+
+        border-color: #2563eb;
+
+    }
+
+
+    .menu-icon {
+
+        font-size: 24px;
+
+        width: 35px;
+
+        text-align: center;
+
+    }
+
+
+    .menu-text {
+
+        font-size: 15px;
+
+        font-weight: bold;
+
+    }
+
+
+    /* =========================================
+       CONTENT AREA
+    ========================================= */
+
+    .content {
+
+        flex: 1;
+
+        padding: 45px;
+
+        overflow-y: auto;
+
+    }
+
+
+    .welcome {
+
+        margin-bottom: 35px;
+
+    }
+
+
+    .welcome h1 {
+
+        font-size: 32px;
+
+        margin-bottom: 10px;
+
+    }
+
+
+    .welcome p {
+
+        color: #cbd5e1;
+
+        font-size: 15px;
+
+    }
+
+
+    /* =========================================
+       DEFAULT CONTENT
+    ========================================= */
+
+    .default-content {
+
+        background:
+            rgba(255, 255, 255, 0.08);
+
+        border: 1px solid
+            rgba(255, 255, 255, 0.12);
+
+        border-radius: 18px;
+
+        padding: 40px;
+
+        text-align: center;
+
+    }
+
+
+    .default-icon {
+
+        font-size: 60px;
+
+        margin-bottom: 20px;
+
+    }
+
+
+    .default-content h2 {
+
+        margin-bottom: 10px;
+
+    }
+
+
+    .default-content p {
+
+        color: #cbd5e1;
+
+    }
+
+
+    /* =========================================
+       DATA CARD
+    ========================================= */
+
+    .data-section {
+
+        display: none;
+
+    }
+
+
+    .data-card {
+
+        background: white;
+
+        color: #111827;
+
+        border-radius: 18px;
+
+        padding: 30px;
+
+        box-shadow:
+            0 15px 40px
+            rgba(0, 0, 0, 0.25);
+
+    }
+
+
+    .data-card h2 {
+
+        margin-bottom: 10px;
+
+    }
+
+
+    .data-description {
+
+        color: #6b7280;
+
+        margin-bottom: 25px;
+
+    }
+
+
+    /* =========================================
+       DATA ROW
+    ========================================= */
+
+    .data-row {
+
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+
+        padding: 16px;
+
+        margin-bottom: 10px;
+
+        background: #f3f4f6;
+
+        border-radius: 10px;
+
+    }
+
+
+    .data-label {
+
+        font-weight: bold;
+
+    }
+
+
+    .data-value {
+
+        color: #4b5563;
+
+    }
+
+
+    /* =========================================
+       PASSWORD VERIFY POPUP
+    ========================================= */
+
+    .modal {
+
+        display: none;
+
+        position: fixed;
+
+        top: 0;
+
+        left: 0;
+
+        width: 100%;
+
+        height: 100%;
+
+        background:
+            rgba(0, 0, 0, 0.65);
+
+        align-items: center;
+
+        justify-content: center;
+
+        z-index: 1000;
+
+    }
+
+
+    .modal-card {
+
+        width: 420px;
+
+        max-width: 90%;
+
+        background: white;
+
+        color: #111827;
+
+        padding: 35px;
+
+        border-radius: 18px;
+
+        box-shadow:
+            0 20px 60px
+            rgba(0, 0, 0, 0.4);
+
+    }
+
+
+    .modal-icon {
+
+        width: 65px;
+
+        height: 65px;
+
+        margin: 0 auto 15px;
+
+        border-radius: 50%;
+
+        background: #eff6ff;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: center;
+
+        font-size: 32px;
+
+    }
+
+
+    .modal-card h2 {
+
+        text-align: center;
+
+        margin-bottom: 10px;
+
+    }
+
+
+    .modal-description {
+
+        text-align: center;
+
+        color: #6b7280;
+
+        font-size: 14px;
+
+        line-height: 1.5;
+
+        margin-bottom: 25px;
+
+    }
+
+
+    /* =========================================
+       PASSWORD INPUT
+    ========================================= */
+
+    .password-input {
+
+        width: 100%;
+
+        padding: 13px;
+
+        border: 1px solid #d1d5db;
+
+        border-radius: 9px;
+
+        outline: none;
+
+        font-size: 15px;
+
+        margin-bottom: 15px;
+
+    }
+
+
+    .password-input:focus {
+
+        border-color: #2563eb;
+
+        box-shadow:
+            0 0 0 3px
+            rgba(37, 99, 235, 0.12);
+
+    }
+
+
+    /* =========================================
+       VERIFY ERROR
+    ========================================= */
+
+    .verify-error {
+
+        display: none;
+
+        background: #fee2e2;
+
+        color: #b91c1c;
+
+        border: 1px solid #fecaca;
+
+        padding: 10px;
+
+        border-radius: 8px;
+
+        margin-bottom: 15px;
+
+        font-size: 14px;
+
+        text-align: center;
+
+    }
+
+
+    /* =========================================
+       MODAL BUTTONS
+    ========================================= */
+
+    .modal-buttons {
+
+        display: flex;
+
+        gap: 10px;
+
+    }
+
+
+    .verify-button {
+
+        flex: 1;
+
+        padding: 13px;
+
+        border: none;
+
+        border-radius: 8px;
+
+        background: #2563eb;
+
+        color: white;
+
+        font-size: 15px;
+
+        font-weight: bold;
+
+        cursor: pointer;
+
+    }
+
+
+    .verify-button:hover {
+
+        background: #1d4ed8;
+
+    }
+
+
+    .cancel-button {
+
+        flex: 1;
+
+        padding: 13px;
+
+        border: none;
+
+        border-radius: 8px;
+
+        background: #e5e7eb;
+
+        color: #374151;
+
+        font-size: 15px;
+
+        font-weight: bold;
+
+        cursor: pointer;
+
+    }
+
+
+    .cancel-button:hover {
+
+        background: #d1d5db;
+
+    }
+
+
+    /* =========================================
+       MOBILE
+    ========================================= */
+
+    @media (max-width: 800px) {
+
+        .dashboard {
+
+            flex-direction: column;
+
+        }
+
+
+        .sidebar {
+
+            width: 100%;
+
+        }
+
+
+        .menu-item {
+
+            display: inline-flex;
+
+            width: 48%;
+
+        }
+
+
+        .content {
+
+            padding: 25px;
+
+        }
+
+    }
+
+
+    @media (max-width: 500px) {
+
+        .menu-item {
+
+            width: 100%;
+
+        }
+
+
+        .header {
+
+            padding: 0 20px;
+
+        }
+
+
+        .logo {
+
+            font-size: 20px;
+
+        }
+
+    }
+
+</style>
+```
+
+</head>
+
+<body>
+
+```
+<!-- =========================================
+     HEADER
+========================================= -->
+
+<div class="header">
+
+    <div class="logo">
+        🔐 SecureVault
+    </div>
+
+
+    <button
+        class="logout"
+        onclick="logout()"
+    >
+        Logout
+    </button>
+
+</div>
+
+
+
+<!-- =========================================
+     DASHBOARD
+========================================= -->
+
+<div class="dashboard">
+
+
+    <!-- =====================================
+         LEFT SIDEBAR
+    ====================================== -->
+
+    <aside class="sidebar">
+
+
+        <div class="sidebar-title">
+            Password Manager
+        </div>
+
+
+        <!-- VIEW CREDENTIALS -->
+
+        <div
+            class="menu-item"
+            onclick="selectMenu('view', this)"
+        >
+
+            <div class="menu-icon">
+                👁️
+            </div>
+
+            <div class="menu-text">
+                View Credentials
+            </div>
+
+        </div>
+
+
+        <!-- CHANGE MASTER PASSWORD -->
+
+        <div
+            class="menu-item"
+            onclick="selectMenu('change', this)"
+        >
+
+            <div class="menu-icon">
+                🔄
+            </div>
+
+            <div class="menu-text">
+                Change Master Password
+            </div>
+
+        </div>
+
+
+        <!-- UPDATE CREDENTIALS -->
+
+        <div
+            class="menu-item"
+            onclick="selectMenu('update', this)"
+        >
+
+            <div class="menu-icon">
+                ✏️
+            </div>
+
+            <div class="menu-text">
+                Update Credentials
+            </div>
+
+        </div>
+
+
+        <!-- ADD CREDENTIALS -->
+
+        <div
+            class="menu-item"
+            onclick="selectMenu('credentials', this)"
+        >
+
+            <div class="menu-icon">
+                ➕
+            </div>
+
+            <div class="menu-text">
+                Add Credentials
+            </div>
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- =====================================
+         RIGHT CONTENT
+    ====================================== -->
+
+    <main class="content">
+
+
+        <div class="welcome">
+
+            <h1>
+                Welcome to SecureVault
+            </h1>
+
+            <p>
+                Select an option from the menu
+                to manage your credentials.
+            </p>
+
+        </div>
+
+
+        <!-- DEFAULT -->
+
+        <div
+            class="default-content"
+            id="defaultContent"
+        >
+
+            <div class="default-icon">
+                🔐
+            </div>
+
+            <h2>
+                Your Password Manager
+            </h2>
+
+            <p>
+                Select any option from the
+                left menu to continue.
+            </p>
+
+        </div>
+
+
+
+        <!-- =================================
+             DATA SECTION
+        ================================== -->
+
+        <div
+            class="data-section"
+            id="dataSection"
+        >
+
+            <div class="data-card">
+
+                <h2 id="dataTitle">
+                    Credentials
+                </h2>
+
+                <p
+                    class="data-description"
+                    id="dataDescription"
+                >
+                    Your data will appear here.
+                </p>
+
+
+                <!-- DATA -->
+
+                <div id="dataContent">
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </main>
+
+</div>
+
+
+
+<!-- =========================================
+     MASTER PASSWORD MODAL
+========================================= -->
+
+<div
+    class="modal"
+    id="passwordModal"
+>
+
+
+    <div class="modal-card">
+
+
+        <div class="modal-icon">
+            🔐
+        </div>
+
+
+        <h2>
+            Verify Master Password
+        </h2>
+
+
+        <p class="modal-description">
+
+            Enter your master password to
+            access this section.
+
+        </p>
+
+
+        <!-- ERROR -->
+
+        <div
+            class="verify-error"
+            id="verifyError"
+        >
+            ❌ Incorrect master password.
+        </div>
+
+
+        <!-- PASSWORD -->
+
+        <input
+            type="password"
+            id="masterPassword"
+            class="password-input"
+            placeholder="Enter master password"
+            autocomplete="off"
+        >
+
+
+        <!-- BUTTONS -->
+
+        <div class="modal-buttons">
+
+
+            <button
+                class="cancel-button"
+                onclick="closePasswordModal()"
+            >
+                Cancel
+            </button>
+
+
+            <button
+                class="verify-button"
+                onclick="verifyMasterPassword()"
+            >
+                🔓 Verify
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================
+     JAVASCRIPT
+========================================= -->
+
+<script>
+
+
+    let selectedMenu = "";
+
+
+
+    /* ========================================
+       SELECT MENU
+    ======================================== */
+
+    function selectMenu(menu, element) {
+
+
+        selectedMenu = menu;
+
+
+        /*
+         * Remove active class
+         */
+
+        const menuItems =
+            document.querySelectorAll(
+                ".menu-item"
+            );
+
+
+        menuItems.forEach(function(item) {
+
+            item.classList.remove("active");
+
+        });
+
+
+        /*
+         * Add active class
+         */
+
+        element.classList.add("active");
+
+
+        /*
+         * Open password verification
+         */
+
+        document.getElementById(
+            "passwordModal"
+        ).style.display = "flex";
+
+
+        /*
+         * Clear previous password
+         */
+
+        document.getElementById(
+            "masterPassword"
+        ).value = "";
+
+
+        document.getElementById(
+            "verifyError"
+        ).style.display = "none";
+
+
+        /*
+         * Focus password field
+         */
+
+        setTimeout(function() {
+
+            document.getElementById(
+                "masterPassword"
+            ).focus();
+
+        }, 100);
+
+    }
+
+
+
+    /* ========================================
+       VERIFY MASTER PASSWORD
+    ======================================== */
+
+    function verifyMasterPassword() {
+
+
+        const password =
+            document.getElementById(
+                "masterPassword"
+            ).value;
+
+
+        const error =
+            document.getElementById(
+                "verifyError"
+            );
+
+
+        /*
+         * Empty password
+         */
+
+        if (password === "") {
+
+            error.innerHTML =
+                "❌ Please enter your master password.";
+
+            error.style.display = "block";
+
+            return;
+
+        }
+
+
+        /*
+         * DEMO PASSWORD
+         *
+         * Later this will be replaced
+         * with PHP + MySQL verification.
+         */
+
+        const correctPassword =
+            "Admin@123";
+
+
+        /*
+         * Check password
+         */
+
+        if (password !== correctPassword) {
+
+            error.innerHTML =
+                "❌ Incorrect master password.";
+
+            error.style.display = "block";
+
+            return;
+
+        }
+
+
+        /*
+         * Password correct
+         */
+
+        document.getElementById(
+            "passwordModal"
+        ).style.display = "none";
+
+
+        /*
+         * Show selected data
+         */
+
+        showData(selectedMenu);
+
+    }
+
+
+
+    /* ========================================
+       SHOW DATA
+    ======================================== */
+
+    function showData(menu) {
+
+
+        const defaultContent =
+            document.getElementById(
+                "defaultContent"
+            );
+
+
+        const dataSection =
+            document.getElementById(
+                "dataSection"
+            );
+
+
+        const dataTitle =
+            document.getElementById(
+                "dataTitle"
+            );
+
+
+        const dataDescription =
+            document.getElementById(
+                "dataDescription"
+            );
+
+
+        const dataContent =
+            document.getElementById(
+                "dataContent"
+            );
+
+
+        /*
+         * Hide default content
+         */
+
+        defaultContent.style.display =
+            "none";
+
+
+        /*
+         * Show data section
+         */
+
+        dataSection.style.display =
+            "block";
+
+
+        /* =================================
+           VIEW CREDENTIALS
+        ================================= */
+
+        if (menu === "view") {
+
+            dataTitle.innerHTML =
+                "👁️ View Credentials";
+
+            dataDescription.innerHTML =
+                "Your saved credentials will be displayed here.";
+
+            dataContent.innerHTML = `
+
+                <div class="data-row">
+
+                    <span class="data-label">
+                        Website
+                    </span>
+
+                    <span class="data-value">
+                        Example.com
+                    </span>
+
+                </div>
+
+
+                <div class="data-row">
+
+                    <span class="data-label">
+                        Username
+                    </span>
+
+                    <span class="data-value">
+                        user@example.com
+                    </span>
+
+                </div>
+
+
+                <div class="data-row">
+
+                    <span class="data-label">
+                        Password
+                    </span>
+
+                    <span class="data-value">
+                        ••••••••••
+                    </span>
+
+                </div>
+
+            `;
+
+        }
+
+
+        /* =================================
+           CHANGE MASTER PASSWORD
+        ================================= */
+
+        else if (menu === "change") {
+
+            dataTitle.innerHTML =
+                "🔄 Change Master Password";
+
+            dataDescription.innerHTML =
+                "Change your existing master password.";
+
+            dataContent.innerHTML = `
+
+                <div class="data-row">
+
+                    <span class="data-label">
+                        Status
+                    </span>
+
+                    <span class="data-value">
+                        Ready to change password
+                    </span>
+
+                </div>
+
+            `;
+
+        }
+
+
+        /* =================================
+           UPDATE CREDENTIALS
+        ================================= */
+
+        else if (menu === "update") {
+
+            dataTitle.innerHTML =
+                "✏️ Update Credentials";
+
+            dataDescription.innerHTML =
+                "Update your saved credential information.";
+
+            dataContent.innerHTML = `
+
+                <div class="data-row">
+
+                    <span class="data-label">
+                        Status
+                    </span>
+
+                    <span class="data-value">
+                        Credential update section
+                    </span>
+
+                </div>
+
+            `;
+
+        }
+
+
+        /* =================================
+           ADD CREDENTIALS
+        ================================= */
+
+        else if (menu === "credentials") {
+
+            dataTitle.innerHTML =
+                "➕ Add Credentials";
+
+            dataDescription.innerHTML =
+                "Add a new website or application credential.";
+
+            dataContent.innerHTML = `
+
+                <div class="data-row">
+
+                    <span class="data-label">
+                        Status
+                    </span>
+
+                    <span class="data-value">
+                        Add credential section
+                    </span>
+
+                </div>
+
+            `;
+
+        }
+
+    }
+
+
+
+    /* ========================================
+       CLOSE MODAL
+    ======================================== */
+
+    function closePasswordModal() {
+
+        document.getElementById(
+            "passwordModal"
+        ).style.display = "none";
+
+
+        document.getElementById(
+            "masterPassword"
+        ).value = "";
+
+
+        document.getElementById(
+            "verifyError"
+        ).style.display = "none";
+
+    }
+
+
+
+    /* ========================================
+       LOGOUT
+    ======================================== */
+
+    function logout() {
+
+        window.location.href =
+            "login.html";
+
+    }
+
+
+</script>
+
+</body>
+
+</html>
