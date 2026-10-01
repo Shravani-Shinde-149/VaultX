@@ -1,2 +1,2 @@
 # VaultX
-Encrype
+Encryped Credential Manager
